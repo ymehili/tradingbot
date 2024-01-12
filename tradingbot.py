@@ -13,13 +13,12 @@ def read_article(link):
     article_txt = get(completelink).text
     return article_txt
 
-
 def write_article_to_file(article_txt, filename):
     with open(filename, 'w') as f:
         f.write(article_txt)
 
 def call_js_script(filename):
-    subprocess.run(['node', 'your_js_script.js', filename], check=True)
+    subprocess.run(['node', 'readermode.js', filename], check=True)
 
 def get_last_news(html_text, lastnews, allnews):
     soup = BeautifulSoup(html_text, 'lxml')
@@ -60,8 +59,9 @@ def get_news():
         time.sleep(3)
         allnews = get_last_news(html_text, lastnews, allnews)
         for new in lastnews:
-            print(new)
-            read_article(new)
+            article_txt = read_article(new)
+            write_article_to_file(article_txt, 'article.txt')
+            call_js_script('article.txt')
         time.sleep(60)
 
 if __name__ == '__main__':
