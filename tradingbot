@@ -1,3 +1,5 @@
+#usr/bin/python3
+
 import subprocess
 import json
 import time
@@ -23,7 +25,6 @@ def call_js_script(filename):
 def get_last_news(html_text, lastnews, allnews):
     soup = BeautifulSoup(html_text, 'lxml')
     news = soup.find_all('a', class_="card-rY32JioV card-pDWUWIxC")
-    lastnews = []
     for article in news:
         if article['href'] not in allnews:
             lastnews.append(article['href'])
@@ -44,8 +45,9 @@ def get_news():
     time.sleep(3)
 
     html_text = driver.page_source
-    allnews = get_last_news(html_text, [])
     lastnews = []
+    allnews = []
+    allnews = get_last_news(html_text, lastnews, allnews)
     while (True):
         driver.refresh()
         time.sleep(3)
@@ -62,6 +64,7 @@ def get_news():
             article_txt = read_article(new)
             write_article_to_file(article_txt, 'article.txt')
             call_js_script('article.txt')
+        lastnews = []
         time.sleep(60)
 
 if __name__ == '__main__':

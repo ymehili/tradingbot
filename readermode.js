@@ -6,7 +6,7 @@ const argv = process.argv;
 const filePath = argv[2];
 
 function putinreadermode(dom) {
-    var article = new Readability(dom).parse();
+    var article = new Readability(dom.window.document).parse();
     console.log(article);
 }
 
