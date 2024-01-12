@@ -1,14 +1,24 @@
 const { Readability } = require('@mozilla/readability');
 const { JSDOM } = require('jsdom');
+const fs = require('fs');
+const argv = process.argv;
 
 const filePath = argv[2];
 
-fs.readFile(filePath, 'utf8', (err, html) => {
-    if (err) {
-        throw err;
-    }
+function putinreadermode(dom) {
+    var article = new Readability(dom).parse();
+    console.log(article);
+}
 
-    const dom = new JSDOM(html);
-    console.log(dom.window.document.querySelector("body").textContent);
-});
+function main() {
+    fs.readFile(filePath, 'utf8', (err, html) => {
+        if (err) {
+            throw err;
+        }
 
+        const dom = new JSDOM(html);
+        putinreadermode(dom);
+    });
+}
+
+main();
