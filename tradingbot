@@ -1,4 +1,4 @@
-#usr/bin/python3
+#!/usr/bin/python3
 
 import subprocess
 import json
@@ -38,9 +38,6 @@ def get_news():
     driver = webdriver.Chrome(options=chrome_options)
     driver.get('https://www.tradingview.com/news/markets/')
     time.sleep(3)
-    # signinbutton = driver.find_element(By.CSS_SELECTOR,
-    #   'tv-header__user-menu-button tv-header__user-menu-button--anonymous js-header-user-menu-button')
-    # signinbutton.click()
     profilebutton = driver.find_element(By.XPATH,
         '//button[@class="tv-header__user-menu-button tv-header__user-menu-button--anonymous js-header-user-menu-button"]')
     profilebutton.click()
@@ -48,8 +45,21 @@ def get_news():
     signinbutton = driver.find_element(By.XPATH,
         '//button[@data-name="header-user-menu-sign-in"]')
     signinbutton.click()
-    #emailbutton = driver.find_element(By.XPATH,
     time.sleep(3)
+    emailbutton = driver.find_element(By.XPATH,
+        '//button[@class="emailButton-nKAw8Hvt light-button-bYDQcOkp with-start-icon-bYDQcOkp variant-secondary-bYDQcOkp color-gray-bYDQcOkp size-medium-bYDQcOkp typography-regular16px-bYDQcOkp"]')
+    emailbutton.click()
+    time.sleep(3)
+    enteremail = driver.find_element(By.XPATH,
+        '//input[@class="input-RUSovanF size-large-RUSovanF with-end-slot-RUSovanF"]')
+    enteremail.send_keys("youssefmehili@gmail.com")
+    enterpassword = driver.find_element(By.XPATH,
+        '//input[@id="id_password"]')
+    enterpassword.send_keys("Yoyoalex#3456")
+    confirmbutton = driver.find_element(By.XPATH,
+        '//button[@class="submitButton-LQwxK8Bm button-D4RPB3ZC size-large-D4RPB3ZC color-brand-D4RPB3ZC variant-primary-D4RPB3ZC stretch-D4RPB3ZC apply-overflow-tooltip apply-overflow-tooltip--check-children-recursively apply-overflow-tooltip--allow-text"]')
+    confirmbutton.click()
+    time.sleep(10)
     html_text = driver.page_source
     lastnews = []
     allnews = []
