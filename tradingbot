@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from requests import get
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 # from openai import OpenAI
 # client = OpenAI()
 
@@ -32,18 +33,23 @@ def get_last_news(html_text, lastnews, allnews):
     return allnews
 
 def get_news():
-    driver = webdriver.Chrome()
+    chrome_options = Options()
+    chrome_options.add_argument("/Users/youssefmehili/Library/Application Support/Google/Chrome")
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get('https://www.tradingview.com/news/markets/')
-
     time.sleep(3)
-    try:
-        refreshbutton = driver.find_element(By.CLASS_NAME,
-        "round-button-FujgyDpN color-black-FujgyDpN variant-primary-FujgyDpN size-medium-FujgyDpN with-start-icon-FujgyDpN")
-        refreshbutton.click()
-    except:
-        print("no refresh button found")
+    # signinbutton = driver.find_element(By.CSS_SELECTOR,
+    #   'tv-header__user-menu-button tv-header__user-menu-button--anonymous js-header-user-menu-button')
+    # signinbutton.click()
+    profilebutton = driver.find_element(By.XPATH,
+        '//button[@class="tv-header__user-menu-button tv-header__user-menu-button--anonymous js-header-user-menu-button"]')
+    profilebutton.click()
     time.sleep(3)
-
+    signinbutton = driver.find_element(By.XPATH,
+        '//button[@data-name="header-user-menu-sign-in"]')
+    signinbutton.click()
+    #emailbutton = driver.find_element(By.XPATH,
+    time.sleep(3)
     html_text = driver.page_source
     lastnews = []
     allnews = []
@@ -52,12 +58,6 @@ def get_news():
         driver.refresh()
         time.sleep(3)
         html_text = driver.page_source
-        try:
-            refreshbutton = driver.find_element(By.XPATH,"//button [span [@class='content-FujgyDpN'")
-            refreshbutton.click()
-            print('found refresh button')
-        except:
-            print("no refresh button found")
         time.sleep(3)
         allnews = get_last_news(html_text, lastnews, allnews)
         for new in lastnews:
